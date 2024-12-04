@@ -5,6 +5,7 @@ import toast from "react-hot-toast";
 type AuthState = {
   authUser: {
     id: string;
+    _id: string;
     fullName: string;
     email: string;
     profilePic: string;
