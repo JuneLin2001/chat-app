@@ -8,6 +8,7 @@ import Settingage from "./pages/Settingage.tsx";
 import ProfilePage from "./pages/ProfilePage.tsx";
 import { useAuthStore } from "./store/useAuthStore.ts";
 import { Loader } from "lucide-react";
+import { Toaster } from "react-hot-toast";
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
@@ -48,6 +49,7 @@ const App = () => {
           element={authUser ? <ProfilePage /> : <Navigate to="/login" />}
         />
       </Routes>
+      <Toaster />
     </>
   );
 };
