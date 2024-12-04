@@ -3,7 +3,13 @@ import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 
 interface AuthState {
-  authUser: { id: string; name: string } | null;
+  authUser: {
+    id: string;
+    fullName: string;
+    email: string;
+    profilePic: string;
+    createdAt: string;
+  } | null;
   isSigningUp: boolean;
   isLoggingIng: boolean;
   isUpdatingProfile: boolean;
@@ -16,6 +22,11 @@ interface AuthState {
   }) => Promise<void>;
   login: (data: { email: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
+  updateProfile: (data: {
+    fullName?: string;
+    email?: string;
+    profilePic: string;
+  }) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -70,6 +81,20 @@ export const useAuthStore = create<AuthState>((set) => ({
     } catch (error) {
       console.log("Error in logout: ", error);
       toast.error("Logout failed");
+    }
+  },
+
+  updateProfile: async (data) => {
+    set({ isUpdatingProfile: true });
+    try {
+      const res = await axiosInstance.put("/auth/update-profile", data);
+      set({ authUser: res.data });
+      toast.success("Profile updated successfully");
+    } catch (error) {
+      console.log("Error in updateProfile: ", error);
+      toast.error("Profile update failed");
+    } finally {
+      set({ isUpdatingProfile: false });
     }
   },
 }));
