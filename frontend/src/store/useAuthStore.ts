@@ -5,18 +5,23 @@ import toast from "react-hot-toast";
 interface AuthState {
   authUser: { id: string; name: string } | null;
   isSigningUp: boolean;
-  isLoggingIn: boolean;
+  isLoggingIng: boolean;
   isUpdatingProfile: boolean;
   isCheckingAuth: boolean;
   checkAuth: () => Promise<void>;
-  signUp: (data: any) => Promise<void>;
+  signUp: (data: {
+    fullName: string;
+    email: string;
+    password: string;
+  }) => Promise<void>;
+  login: (data: { email: string; password: string }) => Promise<void>;
   logout: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
   authUser: null,
   isSigningUp: false,
-  isLoggingIn: false,
+  isLoggingIng: false,
   isUpdatingProfile: false,
   isCheckingAuth: true,
 
@@ -41,6 +46,19 @@ export const useAuthStore = create<AuthState>((set) => ({
       console.log("Error in signup: ", error);
     } finally {
       set({ isSigningUp: false });
+    }
+  },
+
+  login: async (data) => {
+    try {
+      const res = await axiosInstance.post("/auth/login", data);
+      set({ authUser: res.data });
+      toast.success("Login successful");
+    } catch (error) {
+      console.log("Error in login: ", error);
+      toast.error("Login failed");
+    } finally {
+      set({ isLoggingIng: false });
     }
   },
 
