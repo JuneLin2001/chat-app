@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 
-interface AuthState {
+type AuthState = {
   authUser: {
     id: string;
     fullName: string;
@@ -27,7 +27,7 @@ interface AuthState {
     email?: string;
     profilePic: string;
   }) => Promise<void>;
-}
+};
 
 export const useAuthStore = create<AuthState>((set) => ({
   authUser: null,
