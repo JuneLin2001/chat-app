@@ -12,8 +12,10 @@ const ChatContainer = () => {
   const { authUser } = useAuthStore();
 
   useEffect(() => {
-    getMessages(selectedUser._id);
-  }, [selectedUser._id, getMessages]);
+    if (selectedUser?.id) {
+      getMessages(selectedUser._id);
+    }
+  }, [selectedUser, getMessages]);
 
   if (isMessagesLoading) {
     return (
@@ -39,7 +41,6 @@ const ChatContainer = () => {
             className={`chat ${
               message.senderId === authUser._id ? "chat-end" : "chat-start"
             }`}
-            // ref={messageEndRef}
           >
             <div className=" chat-image avatar">
               <div className="size-10 rounded-full border">
@@ -47,7 +48,7 @@ const ChatContainer = () => {
                   src={
                     message.senderId === authUser._id
                       ? authUser.profilePic || "/avatar.png"
-                      : selectedUser.profilePic || "/avatar.png"
+                      : selectedUser?.profilePic || "/avatar.png"
                   }
                   alt="profile pic"
                 />

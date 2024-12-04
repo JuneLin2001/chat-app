@@ -2,16 +2,34 @@ import { create } from "zustand";
 import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axios";
 
+interface Message {
+  _id: string;
+  senderId: string;
+  receiverId: string;
+  text: string;
+  image: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface User {
+  id: string;
+  _id: string;
+  fullName: string;
+  email: string;
+  profilePic: string;
+}
+
 type ChatState = {
-  messages: any[];
-  users: any[];
-  selectedUser: any;
+  messages: Message[];
+  users: User[];
+  selectedUser: User | null;
   isUsersLoading: boolean;
   isMessagesLoading: boolean;
   getUsers: () => void;
   getMessages: (userId: string) => void;
   sendMessage: (messageData: string) => void;
-  setSelectedUser: (selectedUser: any) => void;
+  setSelectedUser: (selectedUser: User) => void;
 };
 
 export const useChatStore = create<ChatState>((set, get) => ({
@@ -49,6 +67,9 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
   sendMessage: async (messageData: string) => {
     const { selectedUser, messages } = get();
+    if (!selectedUser) {
+      return;
+    }
     try {
       const res = await axiosInstance.post(
         `/message/send/${selectedUser._id}`,
