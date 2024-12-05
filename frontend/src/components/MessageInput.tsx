@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 
 const MessageInput = () => {
   const [text, setText] = useState("");
-  const [imagePreview, setImagePreview] = useState(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { sendMessage } = useChatStore();
 
@@ -18,7 +18,11 @@ const MessageInput = () => {
     const reader = new FileReader();
 
     reader.onload = () => {
-      setImagePreview(reader.result);
+      if (typeof reader.result === "string") {
+        setImagePreview(reader.result);
+      } else {
+        toast.error("Failed to load image.");
+      }
     };
 
     reader.readAsDataURL(file);

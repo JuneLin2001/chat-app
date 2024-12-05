@@ -29,7 +29,13 @@ type ChatState = {
   isMessagesLoading: boolean;
   getUsers: () => void;
   getMessages: (userId: string) => void;
-  sendMessage: (messageData: string) => void;
+  sendMessage: ({
+    text,
+    image,
+  }: {
+    text: string;
+    image: string | null;
+  }) => void;
   setSelectedUser: (selectedUser: User | null) => void;
   subscribeToMessages: () => void;
   unsubscribeFromMessages: () => void;
@@ -68,7 +74,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     }
   },
 
-  sendMessage: async (messageData: string) => {
+  sendMessage: async (messageData) => {
     const { selectedUser, messages } = get();
     if (!selectedUser) {
       return;
